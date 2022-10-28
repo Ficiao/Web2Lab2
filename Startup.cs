@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Lab1.Support;
+using Lab1.DB;
 using Auth0.AspNetCore.Authentication;
 
 namespace Lab1
@@ -12,20 +13,21 @@ namespace Lab1
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration _configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureSameSiteNoneCookies();
 
             services.AddAuth0WebAppAuthentication(options => {
-                options.Domain = Configuration["Auth0:Domain"];
-                options.ClientId = Configuration["Auth0:ClientId"];
+                options.Domain = _configuration["Auth0:Domain"];
+                options.ClientId = _configuration["Auth0:ClientId"];
             });
 
+            services.AddSingleton<IDataBase, FirebaseDB>();
             services.AddControllersWithViews();
         }
 
