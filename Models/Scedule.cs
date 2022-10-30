@@ -2,5 +2,6 @@
 {
     public class Scedule
     {
+        public Round[] rounds;
     }
 }

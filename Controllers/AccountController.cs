@@ -35,13 +35,12 @@ namespace Lab1.Controllers
         [Authorize]
         public IActionResult Profile()
         {
-            var kek = User.Claims;
-            bool kek2 = User.IsInRole("Admin");
             return View(new UserProfileViewModel()
             {
-                Name = User.Identity.Name,
-                EmailAddress = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
-                ProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value
+                Name = User.Claims.FirstOrDefault(c => c.Type == "nickname")?.Value,
+                EmailAddress = User.Identity.Name,
+                ProfileImage = User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value,
+                Role = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value,
             });
         }
 

@@ -1,0 +1,200 @@
+﻿@{ ViewData["Title"] = "Rounds"; }
+@{ string role = ViewBag.Role; }
+@{ string scedule = ViewBag.Scedule; }
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h1 style="text-align: center">Results</h1>
+        <label for="roundNumberSelect">Choose round:</label>
+        <select name="roundNumberSelect" id="roundNumberSelect" onchange="roundSelectedChanged(this)">
+        </select>
+        <table id="tableRounds" border="1">
+
+            <tr>
+                <th style="text-align: center">First team</th>
+                <th style="text-align: center">Second team</th>
+                <th style="text-align: center">Goals</th>
+                <th style="text-align: center">Goals</th>
+                @*@if (role.Equals("admin"))
+                    {
+                        <th style="text-align: center"></th>
+                    }*@
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+@if (role.Equals("admin"))
+{<!-- Update Button -->
+    <div class="updateBtn">
+        <button onclick="editRoundsTable()">Update data</button>
+    </div>}
+
+<div class="editTable">
+    <form action="/Results/Rounds" method="post">
+
+        <div class="left">
+            <label for="firstTeam">Enter your name: </label>
+        </div>
+        <div class="right">
+            <input type="text" name="firstTeam" id="firstTeam" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="secondTeam">Second Team:</label>
+        </div>
+        <div class="right">
+            <input type="text" name="secondTeam" id="secondTeam" required>
+        </div>
+        <br><br>
+        <div class="left" title="To leave the field empty in table use value less then 0.">
+            <label for="teamOneGoals">Team 1 Goals: </label>
+        </div>
+        <div class="right" title="To leave the field empty in table use value less then 0.">
+            <input type="number" name="teamOneGoals" id="teamOneGoals" required>
+        </div>
+        <br><br>
+        <div class="left" title="To leave the field empty in table use value less then 0.">
+            <label for="teamTwoGoals">Team 2 Goals: </label>
+        </div>
+        <div class="right" title="To leave the field empty in table use value less then 0.">
+            <input type="number" name="teamTwoGoals" id="teamTwoGoals" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="roundId">Round: </label>
+        </div>
+        <div class="right">
+            <input type="number" name="roundId" id="roundId" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="matchId">Match: </label>
+        </div>
+        <div class="right">
+            <input type="number" name="matchId" id="matchId" required>
+        </div>
+        <br><br>
+        <input type="submit" value="Update" class="editRowBtn" onclick="editRow();">
+    </form>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h1 style="text-align: center">Comments</h1>
+        <table id="table2" border="1">
+
+            <tr>
+                <th style="text-align: center">Name</th>
+                <th style="text-align: center">Comment</th>
+                <th style="text-align: center">Time</th>
+            </tr>
+
+            <tr>
+                <td>Agram</td>
+                <td>Donat</td>
+                <td>2</td>
+            </tr>
+
+            <tr>
+                <td>Rijeka</td>
+                <td>Neretva</td>
+                <td>12</td>
+            </tr>
+
+            <tr>
+                <td>Osijek</td>
+                <td>Međimurje-Čakovec</td>
+                <td>11</td>
+            </tr>
+
+            <tr>
+                <td>Split</td>
+                <td>Dinamo</td>
+                <td>2</td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+@if (role.Equals("admin"))
+{<!-- Update Button -->
+    <div class="updateBtn">
+        <button onclick="editTableDisplay()">Update data</button>
+    </div>}
+
+<div class="editTable">
+    <form action="" method="post" class="form-control">
+
+        <div class="left">
+            <label for="firstTeam">Enter your name: </label>
+        </div>
+        <div class="right">
+            <input type="text" name="firstTeam" id="firstTeam" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="secondTeam">Second Team:</label>
+        </div>
+        <div class="right">
+            <input type="text" name="secondTeam" id="secondTeam" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="teamOneGoals">Team 1 Goals: </label>
+        </div>
+        <div class="right">
+            <input type="number" name="teamOneGoals" id="teamOneGoals" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="teamTwoGoals">Team 2 Goals: </label>
+        </div>
+        <div class="right">
+            <input type="number" name="teamTwoGoals" id="teamTwoGoals" required>
+        </div>
+        <br><br>
+        <input type="submit" value="Update" class="editRowBtn" onclick="editRow();">
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <p id="textJson" style="display:none;">@scedule</p>
+    </div>
+</div>
+
+<script src="~/js/rounds.js" asp-append-version="true"></script>

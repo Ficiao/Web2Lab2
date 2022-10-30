@@ -12,17 +12,18 @@ namespace Lab1.DB
         public FirebaseDB(IConfiguration configuration)
         {
             _configuration = configuration;
+            _firebaseConfig = new FirebaseConfig()
+            {
+                AuthSecret = _configuration["FireBase:AuthSecret"],
+                BasePath = _configuration["FireBase:BasePath"]
+            };
+            dbClient = new FireSharp.FirebaseClient(_firebaseConfig);
         }
 
         private static IConfiguration _configuration;
+        private static IFirebaseConfig _firebaseConfig;
 
-        private static IFirebaseConfig _firebaseConfig = new FirebaseConfig()
-        {
-            AuthSecret = _configuration["FireBase:AuthSecret"],
-            BasePath = _configuration["FireBase:BasePath"]
-        };
-
-        private static IFirebaseClient dbClient = new FireSharp.FirebaseClient(_firebaseConfig);
+        private static IFirebaseClient dbClient;
 
         public Scedule GetSceduleData()
         {
@@ -40,11 +41,24 @@ namespace Lab1.DB
             }
         }
 
-        public void UpdateSceduleData(Scedule scedule)
+        public void UpdateSceduleData(Match match, int roundId, int matchId)
         {
             try
             {
-                FirebaseResponse response = dbClient.Update("Scedule", scedule);
+                FirebaseResponse response = dbClient.Update("Scedule/rounds/" + roundId + "/matches/" + matchId, match);
+                Console.WriteLine(response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void SendScedule(Scedule scedule)
+        {
+            try
+            {
+                SetResponse response = dbClient.Set("Scedule", scedule);
                 Console.WriteLine(response.StatusCode);
             }
             catch (Exception ex)
