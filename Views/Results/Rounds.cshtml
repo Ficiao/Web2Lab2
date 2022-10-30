@@ -16,40 +16,7 @@
                 <th style="text-align: center">Second team</th>
                 <th style="text-align: center">Goals</th>
                 <th style="text-align: center">Goals</th>
-                @*@if (role.Equals("admin"))
-                    {
-                        <th style="text-align: center"></th>
-                    }*@
             </tr>
-
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
         </table>
     </div>
 </div>
@@ -60,7 +27,7 @@
         <button onclick="editRoundsTable()">Update data</button>
     </div>}
 
-<div class="editTable">
+<div class="editTable" id="editRoundsForm">
     <form action="/Results/Rounds" method="post">
 
         <div class="left">
@@ -91,21 +58,19 @@
             <input type="number" name="teamTwoGoals" id="teamTwoGoals" required>
         </div>
         <br><br>
-        <div class="left">
+        <div class="left" style="display:none">
             <label for="roundId">Round: </label>
         </div>
-        <div class="right">
+        <div class="right" style="display:none">
             <input type="number" name="roundId" id="roundId" required>
         </div>
-        <br><br>
-        <div class="left">
+        <div class="left" style="display:none">
             <label for="matchId">Match: </label>
         </div>
-        <div class="right">
+        <div class="right" style="display:none">
             <input type="number" name="matchId" id="matchId" required>
         </div>
-        <br><br>
-        <input type="submit" value="Update" class="editRowBtn" onclick="editRow();">
+        <input type="submit" value="Update" class="editRowBtn">
     </form>
 </div>
 
@@ -114,86 +79,69 @@
     <div class="col-md-12">
 
         <h1 style="text-align: center">Comments</h1>
-        <table id="table2" border="1">
+        <table id="tableComments" border="1">
 
             <tr>
                 <th style="text-align: center">Name</th>
                 <th style="text-align: center">Comment</th>
                 <th style="text-align: center">Time</th>
+                @if (role.Equals("user") || role.Equals("admin"))
+                {
+                    <th style="text-align: center">Delete</th>
+                }
+                @if (role.Equals("user"))
+                {
+                    <th style="text-align: center">Edit</th>
+                }
             </tr>
-
-            <tr>
-                <td>Agram</td>
-                <td>Donat</td>
-                <td>2</td>
-            </tr>
-
-            <tr>
-                <td>Rijeka</td>
-                <td>Neretva</td>
-                <td>12</td>
-            </tr>
-
-            <tr>
-                <td>Osijek</td>
-                <td>Međimurje-Čakovec</td>
-                <td>11</td>
-            </tr>
-
-            <tr>
-                <td>Split</td>
-                <td>Dinamo</td>
-                <td>2</td>
-            </tr>
-
         </table>
     </div>
 </div>
 
-@if (role.Equals("admin"))
+@if (role.Equals("user"))
 {<!-- Update Button -->
     <div class="updateBtn">
-        <button onclick="editTableDisplay()">Update data</button>
+        <button onclick="showCreateCommentForm()">Create comment</button>
     </div>}
 
-<div class="editTable">
-    <form action="" method="post" class="form-control">
 
+<div class="editTable" id="editCommentForm">
+    <form action="/Results/EditComment" method="post">
         <div class="left">
-            <label for="firstTeam">Enter your name: </label>
+            <label for="commentText">Comment: </label>
         </div>
         <div class="right">
-            <input type="text" name="firstTeam" id="firstTeam" required>
+            <input type="text" name="commentText" id="commentText" required>
         </div>
         <br><br>
-        <div class="left">
-            <label for="secondTeam">Second Team:</label>
+        <div class="right" style="display:none">
+            <input type="number" name="editCommentRoundId" id="editCommentRoundId" required>
+        </div>
+        <div class="right" style="display:none">
+            <input type="number" name="editCommentCommentId" id="editCommentCommentId" required>
+        </div>
+        <input type="submit" value="Update" class="editRowBtn" style="align-self:center">
+    </form>
+</div>
+
+<div class="editTable" style="display:none">
+    <form action="/Results/DeleteComment" method="post" class="form-control" id="commentDeleteForm">
+
+        <div class="right">
+            <input type="number" name="deleteCommentRoundId" id="deleteCommentRoundId" required>
         </div>
         <div class="right">
-            <input type="text" name="secondTeam" id="secondTeam" required>
+            <input type="number" name="deleteCommentCommentId" id="deleteCommentCommentId" required>
         </div>
-        <br><br>
-        <div class="left">
-            <label for="teamOneGoals">Team 1 Goals: </label>
-        </div>
-        <div class="right">
-            <input type="number" name="teamOneGoals" id="teamOneGoals" required>
-        </div>
-        <br><br>
-        <div class="left">
-            <label for="teamTwoGoals">Team 2 Goals: </label>
-        </div>
-        <div class="right">
-            <input type="number" name="teamTwoGoals" id="teamTwoGoals" required>
-        </div>
-        <br><br>
-        <input type="submit" value="Update" class="editRowBtn" onclick="editRow();">
+        <input type="submit" value="Hidden" class="editRowBtn">
     </form>
 </div>
 
 <div class="row">
     <div class="col-md-12">
         <p id="textJson" style="display:none;">@scedule</p>
+        <p id="userRoleJson" style="display:none;">@ViewBag.Role</p>
+        <p id="userIdJson" style="display:none;">@ViewBag.UserId</p>
     </div>
 </div>
 

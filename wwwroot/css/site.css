@@ -52,11 +52,10 @@ body {
     width: 60%;
 }
 
-#table2 {
+#tableComments {
     margin: 5px auto;
     width: 60%;
 }
-
 
 table tr:not(:first-child) {
     cursor: pointer;

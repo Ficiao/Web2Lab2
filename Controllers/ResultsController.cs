@@ -5,6 +5,7 @@ using Lab1.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,7 +35,7 @@ namespace Lab1.Controllers
             {
                 ViewBag.Role = "anonymous";
             }
-
+            ViewBag.UserId = User.Identity.Name;
             Scedule scedule = _dataBase.GetSceduleData();
             ViewBag.Scedule = JsonConvert.SerializeObject(scedule);
 
@@ -53,9 +54,94 @@ namespace Lab1.Controllers
                 goalsSecondTeam = TeamTwoGoals
             };
 
-            _dataBase.UpdateSceduleData(match, roundId, matchId);
+            _dataBase.UpdateMatchData(match, roundId, matchId);
 
             return Rounds();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteComment(int deleteCommentRoundId, int deleteCommentCommentId)
+        {
+            Scedule scedule = _dataBase.GetSceduleData();
+            if (User.IsInRole("Admin"))
+            {
+                scedule.rounds[deleteCommentRoundId].comments.RemoveAt(deleteCommentCommentId);
+                _dataBase.UpdateRoundCommentsData(scedule.rounds[deleteCommentRoundId].comments, deleteCommentRoundId);
+            }
+            else
+            {
+                if (scedule.rounds[deleteCommentRoundId].comments[deleteCommentCommentId].ownerId.Equals(User.Identity.Name))
+                {
+                    scedule.rounds[deleteCommentRoundId].comments.RemoveAt(deleteCommentCommentId);
+                    _dataBase.UpdateRoundCommentsData(scedule.rounds[deleteCommentRoundId].comments, deleteCommentRoundId);
+                }
+            }
+
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.Role = "admin";
+            }
+            else if (User.IsInRole("User"))
+            {
+                ViewBag.Role = "user";
+            }
+            else
+            {
+                ViewBag.Role = "anonymous";
+            }
+            ViewBag.UserId = User.Identity.Name;
+            scedule = _dataBase.GetSceduleData();
+            ViewBag.Scedule = JsonConvert.SerializeObject(scedule);
+
+            return View("Rounds");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult EditComment(string commentText, int editCommentRoundId, int editCommentCommentId)
+        {
+            Scedule scedule = _dataBase.GetSceduleData();
+            if (User.IsInRole("User"))
+            {
+
+                if(editCommentCommentId >= 0)
+                {
+                    if (scedule.rounds[editCommentRoundId].comments[editCommentCommentId].ownerId == User.Identity.Name)
+                    {
+                        scedule.rounds[editCommentRoundId].comments[editCommentCommentId].commentText = commentText;
+                        _dataBase.UpdateRoundCommentsData(scedule.rounds[editCommentRoundId].comments, editCommentRoundId);
+                    }
+                }
+                else
+                {
+                    scedule.rounds[editCommentRoundId].comments.Add(new Comment()
+                    {
+                        ownerId = User.Identity.Name,
+                        commentText = commentText,
+                        timeCreated = DateTime.Now.ToString()
+                    });
+                    _dataBase.UpdateRoundCommentsData(scedule.rounds[editCommentRoundId].comments, editCommentRoundId);
+                }
+            }
+
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.Role = "admin";
+            }
+            else if (User.IsInRole("User"))
+            {
+                ViewBag.Role = "user";
+            }
+            else
+            {
+                ViewBag.Role = "anonymous";
+            }
+            ViewBag.UserId = User.Identity.Name;
+            scedule = _dataBase.GetSceduleData();
+            ViewBag.Scedule = JsonConvert.SerializeObject(scedule);
+
+            return View("Rounds");
         }
 
         [AllowAnonymous]

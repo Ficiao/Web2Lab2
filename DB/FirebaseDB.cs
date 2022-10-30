@@ -4,6 +4,7 @@ using FireSharp.Interfaces;
 using System;
 using Lab1.Models;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace Lab1.DB
 {
@@ -31,6 +32,10 @@ namespace Lab1.DB
             {
                 FirebaseResponse response = dbClient.Get("Scedule");
                 Scedule data = response.ResultAs<Scedule>();
+                for(int i = 0; i < data.rounds.Length; i++)
+                {
+                    data.rounds[i].comments.RemoveAll(c => c == null);
+                }
                 Console.WriteLine(response.StatusCode);
                 return data;
             }
@@ -41,11 +46,37 @@ namespace Lab1.DB
             }
         }
 
-        public void UpdateSceduleData(Match match, int roundId, int matchId)
+        public void UpdateMatchData(Match match, int roundId, int matchId)
         {
             try
             {
                 FirebaseResponse response = dbClient.Update("Scedule/rounds/" + roundId + "/matches/" + matchId, match);
+                Console.WriteLine(response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void UpdateRoundCommentsData(List<Comment> comments, int roundId)
+        {
+            try
+            {
+                FirebaseResponse response = dbClient.Set("Scedule/rounds/" + roundId + "/comments/", comments);
+                Console.WriteLine(response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void DeleteComment(int roundId, int commentId)
+        {
+            try
+            {
+                FirebaseResponse response = dbClient.Delete("Scedule/rounds/" + roundId + "/comments/"+commentId);
                 Console.WriteLine(response.StatusCode);
             }
             catch (Exception ex)
