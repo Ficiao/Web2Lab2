@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Lab1.Support
+namespace Lab2.Support
 {
     public static class SameSiteServiceCollectionExtensions
     {

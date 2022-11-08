@@ -57,12 +57,12 @@ body {
     width: 60%;
 }
 
-table tr:not(:first-child) {
+table tr {
     cursor: pointer;
     transition: all .25s ease-in-out;
 }
 
-table tr:not(:first-child):hover {
+table tr:hover {
     background-color: lightpink;
 }
 

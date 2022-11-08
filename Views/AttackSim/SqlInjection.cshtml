@@ -1,0 +1,97 @@
+﻿@{ ViewData["Title"] = "Sql Injection"; }
+
+<div class="updateBtn">
+    <button onclick="showProfileCreationForm()">Create profile</button>
+</div>
+
+<div class="updateBtn">
+    <button onclick="showProfileDataForm()">Profile information</button>
+</div>
+
+<div class="editTable" id="createProfileForm">
+    <form action="/AttackSim/SqlInjectionProfileCreate" method="post">
+
+        <div class="left">
+            <label for="email">Email: </label>
+        </div>
+        <div class="right">
+            <input type="text" name="email" id="email" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="password">Password: </label>
+        </div>
+        <div class="right">
+            <input type="password" name="password" id="password" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="firstName">First name: </label>
+        </div>
+        <div class="right">
+            <input type="text" name="firstName" id="firstName" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="lastName">Last name: </label>
+        </div>
+        <div class="right">
+            <input type="text" name="lastName" id="LasntName" required>
+        </div>
+        <br><br>
+        <input type="submit" value="Create" class="editRowBtn">
+    </form>
+</div>
+
+<div class="editTable" id="showProfileForm" style="display:none">
+    <div id="attackSwitch">
+        <label for="attackSwitchSelect">Sql injection: </label>
+        <select name="attackSwitchSelect" id="attackSwitchSelect" onchange="attackSwitchChanged(this)">
+        </select>
+    </div>
+    <br>
+
+    <form action="/AttackSim/SqlInjectionProfileShow" method="post">
+
+        <div class="left">
+            <label for="email">Email: </label>
+        </div>
+        <div class="right">
+            <input type="text" name="email" id="email" required>
+        </div>
+        <br><br>
+        <div class="left">
+            <label for="password">Password: </label>
+        </div>
+        <div class="right">
+            <input type="password" name="password" id="password" required>
+        </div>
+        <br><br>
+        <div class="right">
+            <input type="text" name="attackEnabled" id="attackEnabled" style="display:none">
+        </div>
+        <input type="submit" value="Show" class="editRowBtn">
+    </form>
+</div>
+
+@if (ViewBag.DataStrings != null)
+{
+    <div class="row" id="showProfileTable">
+        <div class="col-md-12">
+
+            <h1 style="text-align: center">Profile information: </h1>
+            <table id="tableRounds" border="1" style="table-layout:fixed; width:40%;">
+                @foreach (var data in ViewBag.DataStrings)
+                {
+                <tr>
+                    <td>
+                        @data
+                    </td>
+                </tr>
+                }
+            </table>
+        </div>
+    </div>
+}
+
+<script src="~/js/sqlInjection.js" asp-append-version="true"></script>

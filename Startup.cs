@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Lab1.Support;
-using Lab1.DB;
+using Lab2.Support;
+using Lab2.DB;
 using Auth0.AspNetCore.Authentication;
 
-namespace Lab1
+namespace Lab2
 {
     public class Startup
     {
@@ -27,7 +27,7 @@ namespace Lab1
                 options.ClientId = _configuration["Auth0:ClientId"];
             });
 
-            services.AddSingleton<IDataBase, FirebaseDB>();
+            services.AddSingleton<IDataBase, MSqlDB>();
             services.AddControllersWithViews();
         }
 
