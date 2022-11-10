@@ -1,3 +1,19 @@
 ﻿@{ ViewData["Title"] = "CSRF"; }
 
+<br><br>
+<div id="attackSwitch" class="updateBtn">
+    <label for="attackSwitchSelect">CSRF attack: </label>
+    <select name="attackSwitchSelect" id="attackSwitchSelect" onchange="attackSwitchChanged(this)">
+    </select>
+</div>
+<br>
+
+<div class="updateBtn">
+        <form method="post" action="" id="attackForm">
+            <input type="number" name="changeAmmount" value=200 style="display:none"/>
+            <input type="text" name="recieverName" value="HackerAccount" style="display:none"/>
+            <button class="updateBtn" type="submit">Click to get hacked</button>
+        </form>
+</div>
+
 <script src="~/js/csrf.js" asp-append-version="true"></script>

@@ -22,11 +22,6 @@ namespace Lab2
         {
             services.ConfigureSameSiteNoneCookies();
 
-            services.AddAuth0WebAppAuthentication(options => {
-                options.Domain = _configuration["Auth0:Domain"];
-                options.ClientId = _configuration["Auth0:ClientId"];
-            });
-
             services.AddSingleton<IDataBase, MSqlDB>();
             services.AddControllersWithViews();
         }
